@@ -1,7 +1,9 @@
 <!-- My Tag Libs -->
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@page session="true"%>
 
 <!DOCTYPE html>
@@ -31,7 +33,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active mr-4">
-        <a class="nav-link" href="#">HOME <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="${pageContext.request.contextPath}">HOME <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item mr-4">
         <a class="nav-link" href="#">ABOUT</a>
@@ -41,20 +43,58 @@
           CATEGORIES
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/showMens">Mens</a>
+          <a class="dropdown-item"href="${pageContext.request.contextPath}/showWomens">Womens</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/showJerseys">Jerseys</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/showSneakers">Sneakers</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/showCapsAndHeadwears">Caps & Head Wears</a>
+          <a class="dropdown-item" href="${pageContext.request.contextPath}/showWatches">Watches</a>
         </div>
       </li>
       <li class="nav-item mr-4">
         <a class="nav-link" href="#">CONTACT</a>
       </li>
+      <security:authorize access="hasRole('ADMIN')">
+      	<li class="nav-item mr-4">
+       		 <a class="nav-link" href="${pageContext.request.contextPath}/admin/home">ADMIN PAGE</a>
+      	</li>
+      </security:authorize>
+      <security:authorize access="hasRole('EMPLOYEE')">
+      	<li class="nav-item mr-4">
+       		 <a class="nav-link" href="${pageContext.request.contextPath}/admin/home">ADMIN PAGE</a>
+      	</li>
+      </security:authorize>
       <li class="nav-item mr-4">
-      	<a class="nav-link" href="#">CART <i class="fa fa-cart-plus" style="font-size: 17px;"></i>
-      	</a>
+      	<a class="nav-link" href="#" data-toggle="modal" data-target="#myModal">CART <i class="fa fa-cart-plus"></i>(<span id="simpleCart_quantity" class="simpleCart_quantity"></span> Items)</a>
       </li>
-      <li class="nav-item mr-4"><a class="nav-link" href="#">LOG OUT</a></li>
+      <!-- Display User name -->
+       <li class="nav-item mr-4">
+       		<c:if test="${pageContext.request.userPrincipal.name != null}">
+				<a class="nav-link" style="text-transform: uppercase;  color: #00c6d7; cursor: pointer;">
+      				<security:authentication property="principal.username"/>
+      			</a>
+			</c:if>
+			<c:if test="${pageContext.request.userPrincipal.name == null}">
+				<a class="nav-link" style="text-transform: uppercase;  color: #00c6d7; cursor: pointer;">
+      				GUEST
+      			</a>
+			</c:if>
+      	
+      </li> 
+      <!-- Log In/Out Button -->
+      <c:if test="${pageContext.request.userPrincipal.name != null}">
+			 <form:form action="${pageContext.request.contextPath}/logout" method="POST">
+      			<li class="nav-item mr-4"><input class="nav-link btn" type="submit" value="LOG OUT"></li>
+      		</form:form>			
+	  </c:if>
+	   <c:if test="${pageContext.request.userPrincipal.name == null}">
+	   	<li class="nav-item mr-4">
+	   		 <a class="nav-link" href="${pageContext.request.contextPath}/showLoginPage">LOG IN</a>		
+	  	</li>
+			
+	  </c:if>
+     
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -62,6 +102,40 @@
     </form>
   </div>
 </nav>
+
+<!-- Modal -->
+  	<div class="modal fade" id="myModal" role="dialog">
+    	<div class="modal-dialog">
+    
+      	<!-- Modal content-->
+      	<div class="modal-content">
+        	<div class="modal-header">
+          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+          		<h4 class="modal-title">Cart Items</h4>
+        </div>
+        <div class="modal-body">
+          
+
+            <div class="simpleCart_shelfItem text-center">
+              <div class="simpleCart_items">
+                
+              </div>
+            </div>
+
+
+  
+          <p>Total : <span class="simpleCart_total"></span>(<span id="simpleCart_quantity" class="simpleCart_quantity"></span> Items)</p>
+          <p><a href="javascript:;" class="simpleCart_empty">empty cart</a></p>
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-info" href="${pageContext.servletContext.contextPath}/check_out">Check Out</a>
+          <button type="button" class="btn btn-success" data-dismiss="modal">Continue Shopping</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 
 <!-- home section -->
 <section id="home">
@@ -74,7 +148,7 @@
             <h3 class="mb-4">Casual Shoes for Men</h3>
             <div class="ban-buttons">
                 <a href="shop-single.html" class="btn">Shop Now</a>
-                <a href="single.html" class="btn active">All Products</a>
+                <a href="${pageContext.request.contextPath}/allProducts" class="btn active">All Products</a>
             </div>
         	</div>
 		</div>
@@ -209,5 +283,28 @@
     <script src="${pageContext.request.contextPath}/static/scripts/wow.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/scripts/nivo-lightbox.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/scripts/jquery.backstretch.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/scripts/simpleCart.js"></script>
+      <script><!--Script to make the Columns for the Cart-->
+      simpleCart({
+    	    checkout: {
+    	      type: "PayPal",
+    	      email: "you@yours.com"
+    	    },
+    	    cartStyle: "table", 
+    	    cartColumns: [
+    	   
+    	    /* Name */
+    	        { attr: "name", label: "Product Name"},
+    	    /* Quantity */
+    	        { view: "decrement" , label: false },
+    	        { attr: "quantity" , label: "Quantity" } ,
+    	        { view: "increment" , label: false },
+    	    /* Price */
+    	        { attr: "price" , label: "Price" } ,
+    	    /* Remove */
+    	        { view: "remove" , text: "Remove" , label: false }
+    	        ]
+    	  });
+  </script>
 </body>
 </html>

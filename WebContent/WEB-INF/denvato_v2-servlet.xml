@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 
-	<context:annotation-config></context:annotation-config>
+	 <context:annotation-config></context:annotation-config>
 	<context:component-scan base-package="com.denvato_v2"></context:component-scan>
 	<mvc:annotation-driven></mvc:annotation-driven>
 	<mvc:resources location="/resources/" mapping="/static/**"></mvc:resources>
@@ -62,4 +62,9 @@
 	<tx:annotation-driven transaction-manager="myTransactionManager" />
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 	
+	<!-- Loading Custom message resoures -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+	<property name="basenames" value="resources/messages"></property>
+	</bean>
 </beans>

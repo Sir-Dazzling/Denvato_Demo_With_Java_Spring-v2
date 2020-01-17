@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product 
 {
 	@Id
@@ -25,9 +25,6 @@ public class Product
 	@Column(name = "price")
 	private double price;
 	
-	@Column(name = "stock_quantity")
-	private int stockQuantity;
-	
 	@Column(name = "rating")
 	private int rating;
 	
@@ -43,13 +40,12 @@ public class Product
 	}
 
 
-	public Product(String productName, String category, double price, int stockQuantity, int rating, String imageUrl,
+	public Product(String productName, String category, double price, int rating, String imageUrl,
 			boolean trending) 
 	{
 		this.productName = productName;
 		this.category = category;
 		this.price = price;
-		this.stockQuantity = stockQuantity;
 		this.rating = rating;
 		this.imageUrl = imageUrl;
 		this.trending = trending;
@@ -97,16 +93,6 @@ public class Product
 	}
 
 
-	public int getStockQuantity() {
-		return stockQuantity;
-	}
-
-
-	public void setStockQuantity(int stockQuantity) {
-		this.stockQuantity = stockQuantity;
-	}
-
-
 	public int getRating() {
 		return rating;
 	}
@@ -140,8 +126,10 @@ public class Product
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", productName=" + productName + ", category=" + category + ", price=" + price
-				+ ", stockQuantity=" + stockQuantity + ", rating=" + rating + ", imageUrl=" + imageUrl + ", trending="
-				+ trending + "]";
+				+ ", rating=" + rating + ", imageUrl=" + imageUrl + ", trending=" + trending + "]";
 	}
+
+
+	
 	
 }
